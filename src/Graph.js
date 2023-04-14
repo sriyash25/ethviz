@@ -1,28 +1,35 @@
-import { ForceGraph3D } from 'react-force-graph';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
+import ForceGraph3D from 'react-force-graph-3d';
 
-function Graph({ graphData }) {
+function Graph({ graphData, setGraphData }) {
+  const [hoverNode, setHoverNode] = useState(null);
   const fgRef = useRef();
 
-  function nodeVal(node) {
-    if (node && node.label) {
-      return node.label;
-    }
-    return node.id;
+  function handleNodeHover(node) {
+    setHoverNode(node);
   }
 
-  function handleNodeHover(node) {
-    if (node) {
-      fgRef.current.zoomToFit(400, 200, 20);
-    }
+  function handleNodeClick(node) {
+    const newNode = { id: `node${graphData.nodes.length + 1}`, label: `Node ${graphData.nodes.length + 1}` };
+    const newLink = { source: node.id, target: newNode.id };
+
+    setGraphData({
+      nodes: [...graphData.nodes, newNode],
+      links: [...graphData.links, newLink],
+    });
   }
 
   return (
     <ForceGraph3D
       ref={fgRef}
       graphData={graphData}
-      nodeVal={nodeVal}
+      nodeAutoColorBy="group"
+      nodeLabel={(node) => node.label}
+      linkWidth={2}
+      linkDirectionalArrowLength={6}
+      linkDirectionalArrowRelPos={1}
       onNodeHover={handleNodeHover}
+      onNodeClick={handleNodeClick}
     />
   );
 }
