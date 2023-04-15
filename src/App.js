@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import ForceGraph3D from 'react-force-graph-3d';
 import data from './data.json';
 import Graph from './Graph';
+import { saveAs } from 'file-saver';
 
 function App() {
   const [graphData, setGraphData] = useState(data);
+  const [addedNodes, setAddedNodes] = useState([]);
 
   // function to add a new node to an existing node
   function addNode() {
@@ -19,11 +21,20 @@ function App() {
       nodes: [...graphData.nodes, newNode],
       links: [...graphData.links, newLink],
     });
+
+    // update addedNodes state with new node
+    setAddedNodes([...addedNodes, newNode]);
+  }
+
+  // function to export addedNodes to a file
+  function exportNodes() {
+    const json = JSON.stringify(addedNodes);
+    const blob = new Blob([json], { type: 'application/json' });
+    saveAs(blob, 'addedNodes.json');
   }
 
   return (
     <div className="App">
-      <button onClick={addNode}>Add Node</button>
       <Graph graphData={graphData} setGraphData={setGraphData} />
     </div>
   );
