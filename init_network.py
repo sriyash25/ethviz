@@ -22,7 +22,7 @@ node_configs = (
 				('30301', '8546', '8080' ),
 				('30302', '8547', '8008' ),
 				('30303', '8548', '8000' ),
-				('30304', '8445', '8888' ),
+				# ('30304', '8445', '8888' ),
 				)
 
 for i in range(len(node_configs)):
@@ -32,28 +32,10 @@ for i in range(len(node_configs)):
 	print(nodename, eth_port, rpc_port, http_port)
 	#create bootstrap node for the network
 	command1 = f"ssh -i '/Users/adityasalian/Desktop/Livin-the-dream/spring-2023/CS-6675/aditya.pem' ubuntu@ec2-18-188-124-55.us-east-2.compute.amazonaws.com 'nohup geth --datadir {nodename} init genesis.json &> /dev/null'"
-	command2 =  f"ssh -i '/Users/adityasalian/Desktop/Livin-the-dream/spring-2023/CS-6675/aditya.pem' ubuntu@ec2-18-188-124-55.us-east-2.compute.amazonaws.com 'nohup bash /home/ubuntu/final_node_generation.sh -n {nodename} -r {rpc_port} -h {http_port} -e {eth_port} &> /dev/null'"
+	command2 = f"ssh -i '/Users/adityasalian/Desktop/Livin-the-dream/spring-2023/CS-6675/aditya.pem' ubuntu@ec2-18-188-124-55.us-east-2.compute.amazonaws.com 'nohup bash /home/ubuntu/final_node_generation.sh -n {nodename} -r {rpc_port} -h {http_port} -e {eth_port} &> /dev/null'"
+	result = subprocess.Popen(command1, shell=True)#, capture_output=True, text=True)
 	result = subprocess.Popen(command2, shell=True)#, capture_output=True, text=True)
 	print(f'success: {i}')
-	# break
-
-
-
-
-
-
-# # create bootstrap node for the network
-# n1, p1,p2,p3 = "node1", '8546', '8080', '30301'
-# command_boot = f"ssh -i '/Users/adityasalian/Desktop/Livin-the-dream/spring-2023/CS-6675/aditya.pem' ubuntu@ec2-18-188-124-55.us-east-2.compute.amazonaws.com 'nohup bash /home/ubuntu/final_node_generation.sh -n {n1} -r {p1} -h {p2} -e {p3} &> /dev/null'"
-
-# n1, p1,p2,p3 = "node2", '8547', '8008', '30302'
-# command =  f"ssh -i '/Users/adityasalian/Desktop/Livin-the-dream/spring-2023/CS-6675/aditya.pem' ubuntu@ec2-18-188-124-55.us-east-2.compute.amazonaws.com 'nohup bash /home/ubuntu/final_node_generation.sh -n {n1} -r {p1} -h {p2} -e {p3} &> /dev/null'"
-
-# result = subprocess.Popen(command_boot, shell=True)#, capture_output=True, text=True)
-# result2 = subprocess.Popen(command, shell=True)#, capture_output=True, text=True)
-# os.kill(result.pid, signal.SIGINT)
-# os.kill(result2.pid, signal.SIGINT)
-# raise KeyboardInterrupt("Added Bootstrap Node to the Network")
 
 
 

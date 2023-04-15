@@ -3,6 +3,7 @@ from web3 import Web3
 import subprocess
 import json
 import subprocess
+from collections import defaultdict
 import os
 import signal
 
@@ -16,26 +17,33 @@ class CreateLink:
 	# self.
 
 	ethports = {
-		'node1' : '30301',
-		'node2' : '30302',
-		'node3' : '30303',
-		'node4' : '30304',
-		'node5' : '30305',
+		'node0' : '8080',
+		'node1' : '8008',
+		'node2' : '8000',
+		# 'node3' : '30303',
+		'node4' : '8888',
+		# 'node5' : '30305',
 	}
 
-	def __init__(self, source, dest):
+	def __init__(self, source, dest, create = True):
 		self.source = source
 		self.dest = dest
 
 		port1, port2 = self.ethports[source], self.ethports[dest]
 
-		source_url = f'http://18.188.124.55:{str(port1)}'
-		dest_url = f'http://18.188.124.55:{str(port2)}'
+		self.dest_url = f'http://18.188.124.55:{str(port2)}'
+		self.dest_access = Web3(Web3.HTTPProvider(self.dest_url))
+		
+		
 
 		# create accesses for both source and destination nodes
-		self.source_access = Web3(Web3.HTTPProvider(source_url))
-		self.create_new_node(self, dest)
-		self.dest_access = Web3(Web3.HTTPProvider(dest_url))
+		# import pdb; pdb.set_trace();
+		if create:
+			self.create_new_node(self.source)
+		self.source_url = f'http://18.188.124.55:{str(port1)}'
+		self.source_access = Web3(Web3.HTTPProvider(self.source_url))
+		
+		
 	
 	def create_new_node(self, nodename):
 		try: 
@@ -44,8 +52,8 @@ class CreateLink:
 				('30301', '8546', '8080' ),
 				('30302', '8547', '8008' ),
 				('30303', '8548', '8000' ),
-				('30304', '8445', '8888' ),
-				('30305', '8446', '8880') # using this as the new node set while spinning up new node. hardcoding for now.
+				('30304', '8445', '8888' ), # using this as the new node set while spinning up new node. hardcoding for now.
+				# ('30305', '8446', '8880') 
 				)
 			eth_port, rpc_port, http_port = node_configs[-1]
 			# nodename = f"node{i}"
@@ -53,9 +61,8 @@ class CreateLink:
 			#create bootstrap node for the network
 			command1 = f"ssh -i '/Users/adityasalian/Desktop/Livin-the-dream/spring-2023/CS-6675/aditya.pem' ubuntu@ec2-18-188-124-55.us-east-2.compute.amazonaws.com 'nohup geth --datadir {nodename} init genesis.json &> /dev/null'"
 			command2 = f"ssh -i '/Users/adityasalian/Desktop/Livin-the-dream/spring-2023/CS-6675/aditya.pem' ubuntu@ec2-18-188-124-55.us-east-2.compute.amazonaws.com 'nohup bash /home/ubuntu/final_node_generation.sh -n {nodename} -r {rpc_port} -h {http_port} -e {eth_port} &> /dev/null'"
-			result1 = subprocess.Popen(command1, shell=True)#, capture_output=True, text=True)
-			result2 = subprocess.Popen(command2, shell=True)#, capture_output=True, text=True)``
-			# print(f'success: {i}')
+			result1 = subprocess.Popen(command1, shell=True)
+			result2 = subprocess.Popen(command2, shell=True)
 		
 		except Exception as e:
 			print(e)
@@ -63,35 +70,58 @@ class CreateLink:
 	def add_edge(self):
 		try:
 			# get enode of dest node
+			# import pdb; pdb.set_trace();
 			enode = self.dest_access.geth.admin.node_info().enode
+			# print(enode)
 
 			#add the edge from the fetched enode
 			self.source_access.geth.admin.add_peer(enode)
-			print(f'Successfully added edge {self.source} -------- {self.dest}')
+			print(f'Successfully added edge {self.source} <--------> {self.dest}')
 		except Exception as e:
 			print(e)
 
 
+def get_new_connections(OG_GRAPH_PATH, NEW_GRAPH_CONNECTIONS_PATH):
 
+	with open(OG_GRAPH_PATH, 'r') as f:
+		original_graph = json.load(f)
+		existing_nodes = set()
+
+	for og_node in original_graph['nodes']:
+		existing_nodes.add(og_node['id'])
+
+	with open(NEW_GRAPH_CONNECTIONS_PATH, 'r') as f:
+		data = json.load(f)
+
+	new_edges = defaultdict(list)
+
+	for node in data['links']:
+		new_node = node['target']['id']
+		connection = node['source']['id']
+
+		if new_node not in existing_nodes:
+			new_edges[new_node].append(connection)
+	return new_edges
 
 
 
 if __name__ == '__main__':
-	# read json file 
-	'''
-	{
-		u:[v1,v2,v3...]
-		u2: v2
-	}
-	'''
-	# Open the file and read the contents into a string
-	with open('adj_list.json', 'r') as f:
-		graph_data = f.read()
+
+	og_path = 'src/data.json'
+	cur_path = '/Users/adityasalian/Downloads/graph-data.json'
+	adj_matrix = get_new_connections(og_path, cur_path)
+	print(adj_matrix)
+
+	# # Open the file and read the contents into a string
+	# with open('adj_list.json', 'r') as f:
+	# 	graph_data = f.read()
 
 	# Use the json.loads() function to convert the string to a dictionary
-	adj_matrix = json.loads(graph_data)
+	# adj_matrix = json.loads(graph_data)
 
 	for source, neighbors in adj_matrix.items():
 		for dest in neighbors:
-			CreateLink(source,dest).add_edge()
+			
+			# pass create = False flag to bypass node creation.
+			CreateLink(source,dest, create=False).add_edge()
 
