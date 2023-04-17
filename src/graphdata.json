@@ -1,0 +1,12 @@
+{
+    "nodes": [
+      {"id": "node0", "label": "Node 0"},
+      {"id": "node1", "label": "Node 1"},
+      {"id": "node2", "label": "Node 2"}
+    ],
+    "links": [
+      {"source": "node0", "target": "node2"},
+      {"source": "node0", "target": "node1"}
+    ]
+  }
+  

@@ -14,8 +14,11 @@ import Dashboard from "./scenes/dashboard";
 // import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
 import MapChart from "./components/MapChart";
+import ElectricityChart from "./components/ElectricityChart";
+import DistanceChart from "./components/DistanceChart";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
+import AppGraph from "./AppGraph";
 // import Calendar from "./scenes/calendar/calendar";
 
 function App() {
@@ -43,7 +46,10 @@ function App() {
               <Route path="/line" element={<Line />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/calendar" element={<Calendar />} /> */}
+              <Route path="/chart" element={<DistanceChart />} />
               <Route path="/geography" element={<MapChart />} />
+              <Route path="/electricity" element={<ElectricityChart />} />
+              <Route path="/privatechain" element={<AppGraph />} />
             </Routes>
           </main>
         </div>
@@ -55,3 +61,9 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
