@@ -66,14 +66,14 @@ if __name__ == "__main__":
 	# pc1.add_peer(pc3.get_enode())
 	# pc2.add_peer(pc3.get_enode())
 
-	# pc0.get_peers()
-	adj_list = {
-		pc0.get_enode() : pc0.get_peers(),
-		pc1.get_enode() : pc1.get_peers(),
-		pc2.get_enode() : pc2.get_peers(),
-		# pc3.get_enode() : pc3.get_peers(),
-	}
-	# import pdb; pdb. set_trace();
+	# # pc0.get_peers()
+	# adj_list = {
+	# 	pc0.get_enode() : pc0.get_peers(),
+	# 	pc1.get_enode() : pc1.get_peers(),
+	# 	pc2.get_enode() : pc2.get_peers(),
+	# 	# pc3.get_enode() : pc3.get_peers(),
+	# }
+	# # import pdb; pdb. set_trace();
 
-	with  open("pvtnetwork.json", "w+") as opfile:
-		json.dump(adj_list, opfile)
+	# with  open("pvtnetwork.json", "w+") as opfile:
+	# 	json.dump(adj_list, opfile)

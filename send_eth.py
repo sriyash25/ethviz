@@ -60,4 +60,4 @@ if __name__ == "__main__":
 	skey,rkey = port_miner_bindings[sender_port], port_miner_bindings[receiver_port]
 	proof = send_wei(sender=skey, receiver=rkey, value=amount)
 	# import pdb; pdb.set_trace();
-	print(proof)
+	# print(proof)

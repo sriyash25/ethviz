@@ -21,7 +21,7 @@ class CreateLink:
 		'node1' : '8008',
 		'node2' : '8000',
 		# 'node3' : '30303',
-		# 'node4' : '8888',
+		'node4' : '8888',
 		# 'node5' : '80069',
 	}
 
@@ -46,47 +46,45 @@ class CreateLink:
 		
 	
 	def create_new_node(self, nodename):
-		try: 
-			# eth port, rpc port, http port
-			# node_configs = (
-			# 	('30301', '8546', '8080' ),
-			# 	('30302', '8547', '8008' ),
-			# 	('30303', '8548', '8000' ),
-			# 	('30304', '8445', '8888' ), # using this as the new node set while spinning up new node. hardcoding for now.
-			# 	# ('30305', '8549', '80069') 
-			# 	)
-			node_configs = (
-				('30301', '8546', '8080', '0x6d918f4DecDbeCfeD4123dC42b7037D1aEE4D1F9'),
-				('30302', '8547', '8008', '0x86cdF72a4a4D409FCE3c0Ec241382539A96345ea'),
-				('30303', '8548', '8000', '0x0B0E1a69CAA93513406AC9b7EB893f9818044d52'),
-				('30304', '8445', '8888', '0x3135AdF27d0aE632FbedE4D8F2e78e269EaACF06')
-			)
-			eth_port, rpc_port, http_port, account_address = node_configs[-1]
-			# nodename = f"node{i}"
-			print(nodename, eth_port, rpc_port, http_port)
-			#create bootstrap node for the network
-			command1 = f"ssh -i '/Users/adityasalian/Desktop/Livin-the-dream/spring-2023/CS-6675/aditya.pem' ubuntu@ec2-18-188-124-55.us-east-2.compute.amazonaws.com 'nohup geth --datadir {nodename} init genesis.json &> /dev/null'"
-			command2 = f"ssh -i '/Users/adityasalian/Desktop/Livin-the-dream/spring-2023/CS-6675/aditya.pem' ubuntu@ec2-18-188-124-55.us-east-2.compute.amazonaws.com 'nohup cp /home/ubuntu/.ethereum/keystore {nodename}/keystore  &> /dev/null'"
-			command3 = f"ssh -i '/Users/adityasalian/Desktop/Livin-the-dream/spring-2023/CS-6675/aditya.pem' ubuntu@ec2-18-188-124-55.us-east-2.compute.amazonaws.com 'nohup bash /home/ubuntu/final_node_generation.sh -n {nodename} -r {rpc_port} -h {http_port} -e {eth_port} -a {account_address} &> /dev/null'"
-			result1 = subprocess.Popen(command1, shell=True)
-			result2 = subprocess.Popen(command2, shell=True)
-			result3 = subprocess.Popen(command3, shell=True)
+		# try: 
+		# eth port, rpc port, http port
+		# node_configs = (
+		# 	('30301', '8546', '8080' ),
+		# 	('30302', '8547', '8008' ),
+		# 	('30303', '8548', '8000' ),
+		# 	('30304', '8445', '8888' ), # using this as the new node set while spinning up new node. hardcoding for now.
+		# 	# ('30305', '8549', '80069') 
+		# 	)
+		node_configs = (
+			('30301', '8546', '8080', '0x6d918f4DecDbeCfeD4123dC42b7037D1aEE4D1F9'),
+			('30302', '8547', '8008', '0x86cdF72a4a4D409FCE3c0Ec241382539A96345ea'),
+			('30303', '8548', '8000', '0x0B0E1a69CAA93513406AC9b7EB893f9818044d52'),
+			('30304', '8445', '8888', '0x3135AdF27d0aE632FbedE4D8F2e78e269EaACF06')
+		)
+		eth_port, rpc_port, http_port, account_address = node_configs[-1]
+		# nodename = f"node{i}"
+		print(nodename, eth_port, rpc_port, http_port)
+		#create bootstrap node for the network
+		command = f"ssh -i '/Users/adityasalian/Desktop/Livin-the-dream/spring-2023/CS-6675/aditya.pem' ubuntu@ec2-18-188-124-55.us-east-2.compute.amazonaws.com 'nohup bash /home/ubuntu/final_node_generation.sh -n {nodename} -r {rpc_port} -h {http_port} -e {eth_port} -a {account_address} &> /dev/null'"
+		result = subprocess.Popen(command, shell=True)
+
 		
-		except Exception as e:
-			print(e)
+		# except Exception as e:
+		# 	print(e)
 
 	def add_edge(self):
-		try:
-			# get enode of dest node
-			# import pdb; pdb.set_trace();
-			enode = self.dest_access.geth.admin.node_info().enode
-			# print(enode)
+		# try:
+		# get enode of dest node
+		# import pdb; pdb.set_trace();
+		time.sleep(2)
+		enode = self.source_access.geth.admin.node_info().enode
+		print(enode)
 
-			#add the edge from the fetched enode
-			self.source_access.geth.admin.add_peer(enode)
-			print(f'Successfully added edge {self.source} <--------> {self.dest}')
-		except Exception as e:
-			print(e)
+		#add the edge from the fetched enode
+		self.dest_access.geth.admin.add_peer(enode)
+		print(f'Successfully added edge {self.source} <--------> {self.dest}')
+		# except Exception as e:
+		# 	print(e)
 
 
 def get_new_connections(OG_GRAPH_PATH, NEW_GRAPH_CONNECTIONS_PATH):
