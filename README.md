@@ -1,23 +1,7 @@
-
-<p style="color: red; font-weight: bold">>>>>>  gd2md-html alert:  ERRORs: 0; WARNINGs: 1; ALERTS: 7.</p>
-<ul style="color: red; font-weight: bold"><li>See top comment block for details on ERRORs and WARNINGs. <li>In the converted Markdown or HTML, search for inline alerts that start with >>>>>  gd2md-html alert:  for specific instances that need correction.</ul>
-
-<p style="color: red; font-weight: bold">Links to alert messages:</p><a href="#gdcalert1">alert1</a>
-<a href="#gdcalert2">alert2</a>
-<a href="#gdcalert3">alert3</a>
-<a href="#gdcalert4">alert4</a>
-<a href="#gdcalert5">alert5</a>
-<a href="#gdcalert6">alert6</a>
-<a href="#gdcalert7">alert7</a>
-
-<p style="color: red; font-weight: bold">>>>>> PLEASE check and correct alert issues and delete this message and the inline alerts.<hr></p>
-
-
-
 # **Abstract**
 
 
-# The ethereum P2P network is a widely active P2P network which lays special emphasis on the anonymity of the nodes within its network. Analyzing this network for insights into metrics like its topology, network latency, etc are challenging due to two reasons- the asynchronous and decentralized communication routine followed by nodes in the network, and; the rapid growth of the Ethereum network. Furthermore, due to this opaque nature of the network, even private networks (where anonymity is not as high of a priority) is rendered opaque to the end users when they desire to interact with the network. With this project, we aim to address these two domains by- extracting insights into the underlying node discovery protocol of the ethereum network by discovering new peers in the network and plot their geographical spread, and; create a GUI for a private ethereum network to reduce the cognitive overload on the end user of the private ethereum network and enhance their user experience. 
+The ethereum P2P network is a widely active P2P network which lays special emphasis on the anonymity of the nodes within its network. Analyzing this network for insights into metrics like its topology, network latency, etc are challenging due to two reasons- the asynchronous and decentralized communication routine followed by nodes in the network, and; the rapid growth of the Ethereum network. Furthermore, due to this opaque nature of the network, even private networks (where anonymity is not as high of a priority) is rendered opaque to the end users when they desire to interact with the network. With this project, we aim to address these two domains by- extracting insights into the underlying node discovery protocol of the ethereum network by discovering new peers in the network and plot their geographical spread, and; create a GUI for a private ethereum network to reduce the cognitive overload on the end user of the private ethereum network and enhance their user experience. 
 
 
 # **Introduction**
